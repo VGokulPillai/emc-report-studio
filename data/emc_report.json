@@ -1,0 +1,255 @@
+{
+  "_comment": "Report dataset. In production these fields are populated from the Gold layer in Databricks (measurement records) and the image table that links each measurement to a plot location in Azure. Here they are inlined so the demo runs offline. Each project is a selectable 'scope'.",
+
+  "projects": [
+    {
+      "project_id": "PRJ-XR7-2026",
+      "project_name": "XR-7 Advanced Signal Processing Module",
+      "document_number": "RPT-XR7-2026-001",
+      "revision": "3.0",
+      "issue_date": "2026-06-18",
+      "classification": "UNCLASSIFIED",
+      "client": "Vertex Aerospace Systems Ltd",
+      "test_lab": "Element Warwick — EMC & Wireless Laboratory",
+      "accreditation": "UKAS 17025 · Lab No. 0123",
+      "standards": ["EN 55032:2015 (CISPR 32) Class B", "EN 55035:2017", "IEC 61000-4-2", "IEC 61000-4-3"],
+
+      "eut": {
+        "description": "The XR-7 is a rack-mounted advanced signal-processing module operating across 100 MHz to 6 GHz. It comprises a triple-channel RF front end, an FPGA processing core and a switched-mode DC supply.",
+        "model": "XR-7 Rev C",
+        "serial": "SN-XR7-00417",
+        "supply": "48 V DC, 2.4 A max",
+        "dimensions": "482 x 88 x 350 mm (19\" 2U)",
+        "modes": "Idle, Half-load, Full-load, Peak-burst",
+        "cables": "Shielded RF (SMA), CAT6A data, DC power harness"
+      },
+
+      "summary_rows": [
+        ["Radiated Emissions",   "EN 55032 Class B", "Peak margin -6.2 dB @ 232 MHz", "PASS"],
+        ["Conducted Emissions",  "EN 55032 Class B", "Peak margin -4.8 dB @ 0.53 MHz", "PASS"],
+        ["Radiated Immunity",    "IEC 61000-4-3, 10 V/m", "Criterion A, all bands", "PASS"],
+        ["ESD Immunity",         "IEC 61000-4-2, +/-8 kV", "Criterion A, contact & air", "PASS"],
+        ["Electrical Fast Transient", "IEC 61000-4-4, +/-2 kV", "Criterion A", "PASS"]
+      ],
+
+      "radiated_emissions": {
+        "standard": "EN 55032:2015 Class B",
+        "site": "3 m Semi-Anechoic Chamber (SAC-2)",
+        "detector": "Quasi-peak / Average, CISPR 16-1-1 receiver",
+        "narrative": "Radiated emissions were measured from 30 MHz to 6 GHz with the EUT in Full-load mode, the worst-case configuration identified during pre-scan. The chamber turntable was rotated 0-360 deg and the antenna height scanned 1-4 m at each azimuth to capture maximum emissions. The highest emission occurred at 232 MHz, 6.2 dB below the Class B limit.",
+        "plot": "radiated_emissions",
+        "plot_caption": "Figure RE-1. Radiated emissions, horizontal polarisation, 30 MHz - 1 GHz vs EN 55032 Class B QP limit.",
+        "table_caption": "Table RE-1. Highest radiated emissions (worst-case azimuth/height).",
+        "table_headers": ["Freq (MHz)", "Reading (dBuV/m)", "Limit (dBuV/m)", "Margin (dB)", "Detector", "Pol.", "Status"],
+        "table_rows": [
+          ["156.00", "33.8", "40.0", "-6.2", "QP", "H", "PASS"],
+          ["232.00", "33.8", "40.0", "-6.2", "QP", "H", "PASS"],
+          ["312.50", "31.2", "40.0", "-8.8", "QP", "V", "PASS"],
+          ["433.92", "29.4", "40.0", "-10.6", "QP", "H", "PASS"],
+          ["868.00", "36.1", "47.0", "-10.9", "QP", "V", "PASS"],
+          ["1200.0", "38.7", "47.0", "-8.3", "AV", "H", "PASS"],
+          ["2400.0", "40.2", "47.0", "-6.8", "AV", "V", "PASS"]
+        ]
+      },
+
+      "conducted_emissions": {
+        "standard": "EN 55032:2015 Class B",
+        "site": "Shielded Room 1, 50 uH/50 Ohm LISN",
+        "detector": "Quasi-peak / Average, 150 kHz - 30 MHz",
+        "narrative": "Conducted emissions on the AC mains port were measured across 150 kHz to 30 MHz using a two-line LISN. Both live and neutral conductors were scanned; the table lists the higher of the two. The worst-case margin was -4.8 dB at 530 kHz on the live conductor.",
+        "plot": "conducted_emissions",
+        "plot_caption": "Figure CE-1. Conducted emissions on mains port (Live) vs EN 55032 Class B QP/AV limits.",
+        "table_caption": "Table CE-1. Highest conducted emissions.",
+        "table_headers": ["Freq (MHz)", "QP (dBuV)", "QP Limit", "AV (dBuV)", "AV Limit", "Cond.", "Status"],
+        "table_rows": [
+          ["0.53", "61.2", "66.0", "48.3", "56.0", "L", "PASS"],
+          ["0.80", "58.9", "63.5", "45.1", "53.5", "L", "PASS"],
+          ["1.50", "55.4", "60.0", "42.7", "50.0", "N", "PASS"],
+          ["3.20", "52.1", "56.0", "39.8", "46.0", "L", "PASS"],
+          ["6.40", "49.7", "56.0", "37.2", "46.0", "N", "PASS"],
+          ["12.8", "47.3", "60.0", "35.6", "50.0", "L", "PASS"],
+          ["24.0", "44.8", "60.0", "33.1", "50.0", "N", "PASS"]
+        ]
+      },
+
+      "radiated_immunity": {
+        "standard": "IEC 61000-4-3",
+        "field": "10 V/m, 80% AM 1 kHz, 80 MHz - 6 GHz",
+        "narrative": "The EUT was exposed to a 10 V/m field, 80% amplitude-modulated, across 80 MHz to 6 GHz on four faces in both polarisations. Signal integrity of all three RF channels was monitored continuously. No degradation beyond permitted limits was observed; performance criterion A was met throughout.",
+        "table_caption": "Table RS-1. Radiated immunity results by band and face.",
+        "table_headers": ["Band (MHz)", "Field (V/m)", "Pol.", "Face", "Observation", "Criterion"],
+        "table_rows": [
+          ["80 - 1000", "10", "H", "Front", "No degradation", "A"],
+          ["80 - 1000", "10", "V", "Front", "No degradation", "A"],
+          ["1000 - 2700", "10", "H", "Rear", "No degradation", "A"],
+          ["2700 - 6000", "10", "V", "Side", "No degradation", "A"]
+        ]
+      },
+
+      "esd_immunity": {
+        "standard": "IEC 61000-4-2",
+        "levels": "Contact +/-4 kV, +/-8 kV; Air +/-8 kV, +/-15 kV",
+        "narrative": "Electrostatic discharge was applied to all user-accessible points and to horizontal/vertical coupling planes. Ten discharges of each polarity were applied per point. The EUT continued to operate normally with no loss of function or data corruption; criterion A was achieved.",
+        "table_caption": "Table ESD-1. ESD immunity results.",
+        "table_headers": ["Discharge Point", "Type", "Level (kV)", "Discharges", "Observation", "Criterion"],
+        "table_rows": [
+          ["Front panel / buttons", "Contact", "+/-4, +/-8", "10 each", "No effect", "A"],
+          ["Chassis seams", "Contact", "+/-8", "10 each", "No effect", "A"],
+          ["Ventilation grille", "Air", "+/-8, +/-15", "10 each", "No effect", "A"],
+          ["HCP / VCP", "Contact", "+/-8", "10 each", "No effect", "A"]
+        ]
+      },
+
+      "appendix": {
+        "table_caption": "Table A-1. Full radiated-emissions sweep extract (worst azimuth).",
+        "table_headers": ["Test ID", "Freq (MHz)", "Reading", "Limit", "Margin", "Detector", "Status"],
+        "table_rows": [
+          ["RE-1001", "48.00", "22.1", "40.0", "-17.9", "QP", "PASS"],
+          ["RE-1002", "96.00", "28.4", "40.0", "-11.6", "QP", "PASS"],
+          ["RE-1003", "156.0", "31.7", "40.0", "-8.3", "QP", "PASS"],
+          ["RE-1004", "232.0", "33.8", "40.0", "-6.2", "QP", "PASS"],
+          ["RE-1005", "312.5", "31.2", "40.0", "-8.8", "QP", "PASS"],
+          ["RE-1006", "433.9", "29.4", "40.0", "-10.6", "QP", "PASS"],
+          ["RE-1007", "617.0", "27.9", "40.0", "-12.1", "QP", "PASS"],
+          ["RE-1008", "868.0", "36.1", "47.0", "-10.9", "QP", "PASS"],
+          ["RE-1009", "1200.", "38.7", "47.0", "-8.3", "AV", "PASS"],
+          ["RE-1010", "1800.", "37.4", "47.0", "-9.6", "AV", "PASS"],
+          ["RE-1011", "2400.", "40.2", "47.0", "-6.8", "AV", "PASS"],
+          ["RE-1012", "3600.", "35.5", "47.0", "-11.5", "AV", "PASS"],
+          ["RE-1013", "4800.", "33.9", "47.0", "-13.1", "AV", "PASS"],
+          ["RE-1014", "6000.", "31.2", "47.0", "-15.8", "AV", "PASS"]
+        ]
+      },
+
+      "revision_history": [
+        ["1.0", "2026-04-02", "T. Okafor", "Initial issue"],
+        ["2.0", "2026-05-14", "T. Okafor", "Added conducted-immunity results"],
+        ["3.0", "2026-06-18", "H. Nguyen", "Full re-test after firmware v2.3; all sections re-issued"]
+      ],
+      "approvals": [
+        ["Prepared by", "H. Nguyen", "EMC Test Engineer", "2026-06-18"],
+        ["Reviewed by", "T. Okafor", "Senior EMC Engineer", "2026-06-18"],
+        ["Approved by", "D. Whitmore", "Laboratory Manager", "2026-06-18"]
+      ]
+    },
+
+    {
+      "project_id": "PRJ-AVN-2026",
+      "project_name": "Avalon-9 Automotive Radar ECU",
+      "document_number": "RPT-AVN-2026-014",
+      "revision": "1.2",
+      "issue_date": "2026-07-30",
+      "classification": "COMMERCIAL IN CONFIDENCE",
+      "client": "Northgate Automotive GmbH",
+      "test_lab": "Element Warwick — EMC & Wireless Laboratory",
+      "accreditation": "UKAS 17025 · Lab No. 0123",
+      "standards": ["CISPR 25 Class 5", "ISO 11452-2", "ISO 10605", "ISO 7637-2"],
+
+      "eut": {
+        "description": "The Avalon-9 is a 77 GHz automotive radar electronic control unit for advanced driver-assistance systems, powered from the vehicle 12 V bus.",
+        "model": "AVN-9 B2",
+        "serial": "SN-AVN9-02231",
+        "supply": "12 V DC (9-16 V), 3.1 A max",
+        "dimensions": "120 x 90 x 28 mm",
+        "modes": "Standby, Tracking, Full-scan",
+        "cables": "Coax radar feed, LVDS data, power harness"
+      },
+
+      "summary_rows": [
+        ["Radiated Emissions",   "CISPR 25 Class 5", "Peak margin -3.9 dB @ 154 MHz", "PASS"],
+        ["Conducted Emissions",  "CISPR 25 Class 5", "Peak margin -5.1 dB @ 1.2 MHz", "PASS"],
+        ["Radiated Immunity",    "ISO 11452-2, 100 V/m", "Class A, all bands", "PASS"],
+        ["ESD Immunity",         "ISO 10605, +/-8 kV", "Class A", "PASS"],
+        ["Transient Immunity",   "ISO 7637-2 pulses 1-5", "Class A", "PASS"]
+      ],
+
+      "radiated_emissions": {
+        "standard": "CISPR 25:2016 Class 5",
+        "site": "ALSE Chamber, 1 m antenna distance",
+        "detector": "Peak / Average, CISPR 16-1-1 receiver",
+        "narrative": "Radiated emissions were measured in the ALSE per CISPR 25 with the EUT in Full-scan mode. The vehicle harness was routed along the standard 1.5 m bench layout. Worst-case emission was -3.9 dB relative to the Class 5 limit at 154 MHz.",
+        "plot": "radiated_emissions",
+        "plot_caption": "Figure RE-1. Radiated emissions vs CISPR 25 Class 5 peak limit, vertical polarisation.",
+        "table_caption": "Table RE-1. Highest radiated emissions.",
+        "table_headers": ["Freq (MHz)", "Reading (dBuV/m)", "Limit (dBuV/m)", "Margin (dB)", "Detector", "Pol.", "Status"],
+        "table_rows": [
+          ["76.00", "28.9", "34.0", "-5.1", "PK", "V", "PASS"],
+          ["154.0", "34.1", "38.0", "-3.9", "PK", "V", "PASS"],
+          ["330.0", "30.7", "38.0", "-7.3", "PK", "H", "PASS"],
+          ["600.0", "27.5", "38.0", "-10.5", "AV", "V", "PASS"],
+          ["1200.0", "29.9", "42.0", "-12.1", "AV", "H", "PASS"],
+          ["2450.0", "33.4", "42.0", "-8.6", "AV", "V", "PASS"]
+        ]
+      },
+
+      "conducted_emissions": {
+        "standard": "CISPR 25:2016 Class 5",
+        "site": "Bench setup, 5 uH LISN on 12 V supply",
+        "detector": "Peak / Average, 150 kHz - 108 MHz",
+        "narrative": "Conducted emissions on the 12 V supply line were measured with a 5 uH LISN. The worst-case margin was -5.1 dB at 1.2 MHz.",
+        "plot": "conducted_emissions",
+        "plot_caption": "Figure CE-1. Conducted emissions on 12 V line vs CISPR 25 Class 5 limits.",
+        "table_caption": "Table CE-1. Highest conducted emissions.",
+        "table_headers": ["Freq (MHz)", "PK (dBuV)", "PK Limit", "AV (dBuV)", "AV Limit", "Cond.", "Status"],
+        "table_rows": [
+          ["0.50", "58.1", "70.0", "44.2", "50.0", "+", "PASS"],
+          ["1.20", "62.9", "68.0", "46.8", "48.0", "+", "PASS"],
+          ["3.00", "54.3", "64.0", "41.1", "44.0", "+", "PASS"],
+          ["10.0", "49.7", "58.0", "37.5", "38.0", "+", "PASS"],
+          ["30.0", "45.2", "52.0", "33.0", "36.0", "+", "PASS"]
+        ]
+      },
+
+      "radiated_immunity": {
+        "standard": "ISO 11452-2",
+        "field": "100 V/m, 400 MHz - 3 GHz, ALSE",
+        "narrative": "The EUT was exposed to a 100 V/m field per ISO 11452-2. Radar tracking accuracy was monitored throughout; deviations remained within the manufacturer's Class A functional-performance limits.",
+        "table_caption": "Table RS-1. Radiated immunity results.",
+        "table_headers": ["Band (MHz)", "Field (V/m)", "Pol.", "Mode", "Observation", "Class"],
+        "table_rows": [
+          ["400 - 1000", "100", "V", "Full-scan", "Within tolerance", "A"],
+          ["1000 - 2000", "100", "H", "Full-scan", "Within tolerance", "A"],
+          ["2000 - 3000", "100", "V", "Tracking", "Within tolerance", "A"]
+        ]
+      },
+
+      "esd_immunity": {
+        "standard": "ISO 10605",
+        "levels": "Contact +/-4 kV, +/-8 kV; Air +/-15 kV",
+        "narrative": "ESD was applied per ISO 10605 using the 330 pF / 330 Ohm network. The EUT recovered automatically with no persistent fault; Class A achieved.",
+        "table_caption": "Table ESD-1. ESD immunity results.",
+        "table_headers": ["Discharge Point", "Type", "Level (kV)", "Network", "Observation", "Class"],
+        "table_rows": [
+          ["Connector shells", "Contact", "+/-4, +/-8", "330pF/330R", "No effect", "A"],
+          ["Housing", "Air", "+/-15", "330pF/330R", "No effect", "A"],
+          ["Ground plane", "Contact", "+/-8", "150pF/330R", "No effect", "A"]
+        ]
+      },
+
+      "appendix": {
+        "table_caption": "Table A-1. Radiated-emissions sweep extract.",
+        "table_headers": ["Test ID", "Freq (MHz)", "Reading", "Limit", "Margin", "Detector", "Status"],
+        "table_rows": [
+          ["RE-2001", "40.0", "21.0", "34.0", "-13.0", "PK", "PASS"],
+          ["RE-2002", "76.0", "28.9", "34.0", "-5.1", "PK", "PASS"],
+          ["RE-2003", "154.0", "34.1", "38.0", "-3.9", "PK", "PASS"],
+          ["RE-2004", "330.0", "30.7", "38.0", "-7.3", "PK", "PASS"],
+          ["RE-2005", "600.0", "27.5", "38.0", "-10.5", "AV", "PASS"],
+          ["RE-2006", "1200.", "29.9", "42.0", "-12.1", "AV", "PASS"],
+          ["RE-2007", "2450.", "33.4", "42.0", "-8.6", "AV", "PASS"]
+        ]
+      },
+
+      "revision_history": [
+        ["1.0", "2026-07-02", "R. Bianchi", "Initial issue"],
+        ["1.1", "2026-07-19", "R. Bianchi", "Corrected harness layout note"],
+        ["1.2", "2026-07-30", "H. Nguyen", "Added transient-immunity summary"]
+      ],
+      "approvals": [
+        ["Prepared by", "R. Bianchi", "EMC Test Engineer", "2026-07-30"],
+        ["Reviewed by", "T. Okafor", "Senior EMC Engineer", "2026-07-30"],
+        ["Approved by", "D. Whitmore", "Laboratory Manager", "2026-07-30"]
+      ]
+    }
+  ]
+}

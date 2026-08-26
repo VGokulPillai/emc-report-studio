@@ -1,0 +1,94 @@
+{
+  "template_name": "Element EMC Compliance Report — Default",
+  "template_version": "1.0",
+  "description": "Highly configurable report template. Everything a user would tweak for house style — fonts, brand colours, table formatting, page setup, cover layout, header/footer, and which sections are produced — is driven from this file. Duplicate it to create alternative house styles.",
+
+  "page": {
+    "size": "A4",
+    "margin_top_mm": 22,
+    "margin_bottom_mm": 20,
+    "margin_left_mm": 20,
+    "margin_right_mm": 20
+  },
+
+  "brand": {
+    "primary": "#0B5FFF",
+    "primary_dark": "#0A2540",
+    "accent": "#00A972",
+    "pass": "#1E8E3E",
+    "fail": "#D93025",
+    "text": "#1A1A1A",
+    "muted": "#5F6B7A",
+    "table_header_fill": "#0A2540",
+    "table_header_text": "#FFFFFF",
+    "table_band_fill": "#F1F5FB",
+    "table_border": "#C6D2E1",
+    "rule": "#0B5FFF"
+  },
+
+  "fonts": {
+    "body_family": "Helvetica",
+    "heading_family": "Helvetica-Bold",
+    "body_size": 10,
+    "h1_size": 18,
+    "h2_size": 13,
+    "h3_size": 11,
+    "table_header_size": 9,
+    "table_cell_size": 9,
+    "caption_size": 8
+  },
+
+  "table_style": {
+    "banded_rows": true,
+    "header_bold": true,
+    "border_width_pt": 0.5,
+    "cell_padding_pt": 4,
+    "status_color_coding": true,
+    "repeat_header_each_page": true
+  },
+
+  "cover": {
+    "show_hero_image": true,
+    "hero_image": "element-lab-hero.png",
+    "show_logo": true,
+    "logo": "element-logo.png",
+    "partner_logo": "databricks-logo.png",
+    "show_partner_strip": true,
+    "classification_banner": true
+  },
+
+  "header": {
+    "enabled": true,
+    "left_text": "{document_number}",
+    "right_text": "{project_name}",
+    "show_logo": true
+  },
+  "footer": {
+    "enabled": true,
+    "left_text": "{classification}",
+    "center_text": "Element Materials Technology",
+    "right_text": "Page {page} of {pages}"
+  },
+
+  "sections": {
+    "cover": true,
+    "revision_history": true,
+    "table_of_contents": true,
+    "executive_summary": true,
+    "eut_description": true,
+    "test_summary": true,
+    "radiated_emissions": true,
+    "conducted_emissions": true,
+    "radiated_immunity": true,
+    "esd_immunity": true,
+    "appendix_raw_data": true,
+    "declaration": true
+  },
+
+  "options": {
+    "include_plots": true,
+    "plot_dpi": 150,
+    "watermark_draft": false,
+    "watermark_text": "DRAFT"
+  }
+}

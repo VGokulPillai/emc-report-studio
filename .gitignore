@@ -1,0 +1,12 @@
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.env
+output/
+.databricks/
+.idea/
+.vscode/
+*.swp
+.DS_Store
+node_modules/

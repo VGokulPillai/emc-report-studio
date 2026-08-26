@@ -1,0 +1,94 @@
+{
+  "template_name": "Element EMC — Draft / Internal (compact)",
+  "template_version": "1.0",
+  "description": "Internal review style: DRAFT watermark, no hero image, tighter tables and smaller type so a long sweep fits in fewer pages.",
+
+  "page": {
+    "size": "A4",
+    "margin_top_mm": 16,
+    "margin_bottom_mm": 16,
+    "margin_left_mm": 15,
+    "margin_right_mm": 15
+  },
+
+  "brand": {
+    "primary": "#4A5A6B",
+    "primary_dark": "#2B3947",
+    "accent": "#7A8CA0",
+    "pass": "#1E8E3E",
+    "fail": "#D93025",
+    "text": "#1A1A1A",
+    "muted": "#6B7684",
+    "table_header_fill": "#5F6B7A",
+    "table_header_text": "#FFFFFF",
+    "table_band_fill": "#FFFFFF",
+    "table_border": "#B9C3CE",
+    "rule": "#5F6B7A"
+  },
+
+  "fonts": {
+    "body_family": "Helvetica",
+    "heading_family": "Helvetica-Bold",
+    "body_size": 9,
+    "h1_size": 15,
+    "h2_size": 11,
+    "h3_size": 10,
+    "table_header_size": 8,
+    "table_cell_size": 8,
+    "caption_size": 7
+  },
+
+  "table_style": {
+    "banded_rows": false,
+    "header_bold": true,
+    "border_width_pt": 0.25,
+    "cell_padding_pt": 2,
+    "status_color_coding": true,
+    "repeat_header_each_page": true
+  },
+
+  "cover": {
+    "show_hero_image": false,
+    "hero_image": "element-lab-hero.png",
+    "show_logo": true,
+    "logo": "element-logo.png",
+    "partner_logo": "databricks-logo.png",
+    "show_partner_strip": false,
+    "classification_banner": true
+  },
+
+  "header": {
+    "enabled": true,
+    "left_text": "{document_number}",
+    "right_text": "{project_name}",
+    "show_logo": false
+  },
+  "footer": {
+    "enabled": true,
+    "left_text": "{classification} — DRAFT, not for issue",
+    "center_text": "Element Materials Technology",
+    "right_text": "Page {page} of {pages}"
+  },
+
+  "sections": {
+    "cover": true,
+    "revision_history": true,
+    "table_of_contents": false,
+    "executive_summary": true,
+    "eut_description": true,
+    "test_summary": true,
+    "radiated_emissions": true,
+    "conducted_emissions": true,
+    "radiated_immunity": true,
+    "esd_immunity": true,
+    "appendix_raw_data": true,
+    "declaration": false
+  },
+
+  "options": {
+    "include_plots": true,
+    "plot_dpi": 150,
+    "watermark_draft": true,
+    "watermark_text": "DRAFT"
+  }
+}

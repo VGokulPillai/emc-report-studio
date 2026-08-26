@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>EMC Report Studio — Element</title>
+  <link rel="icon" href="/assets/element-logo.png" />
+  <link rel="stylesheet" href="/static/styles.css?v=__V__" />
+</head>
+<body>
+  <header class="app-header">
+    <div class="brand">
+      <img src="/assets/element-logo.png" alt="Element" />
+      <div class="brand-copy">
+        <strong>EMC Report Studio</strong>
+        <span>Element Warwick · EMC &amp; Wireless Laboratory</span>
+      </div>
+    </div>
+    <nav class="workspace-nav">
+      <button type="button" class="ws-tab" data-ws="data">Lab data</button>
+      <button type="button" class="ws-tab" data-ws="wrangle">Wrangle</button>
+      <button type="button" class="ws-tab active" data-ws="report">Report</button>
+    </nav>
+    <div class="header-meta">
+      <img class="partner" src="/assets/databricks-logo.png" alt="Databricks" />
+      <span id="user" class="user-pill">Signed in</span>
+    </div>
+  </header>
+
+  <main>
+    <!-- ────────────── TAB 1 — what is inside the tables ────────────── -->
+    <section id="ws-data" class="workspace" hidden>
+      <aside class="rail">
+        <section class="panel">
+          <h2>Tables</h2>
+          <p class="hint" id="source-hint">Unity Catalog Gold feeds the report.</p>
+          <div class="search-row">
+            <input id="table-search" value="emc" placeholder="Search tables…" />
+            <button type="button" id="search-tables" class="generate secondary compact">Search</button>
+          </div>
+          <div id="table-list" class="table-list tall"></div>
+        </section>
+      </aside>
+
+      <div class="workspace-pane stack">
+        <section class="panel">
+          <h2 id="table-title">Table</h2>
+          <p class="hint" id="table-meta">Pick a table on the left to look inside it.</p>
+          <pre id="table-sql" class="sql-block"></pre>
+          <div id="table-data" class="data-grid tall"></div>
+        </section>
+      </div>
+    </section>
+
+    <!-- ────────────── TAB 2 — wrangle data into a report table ────────────── -->
+    <section id="ws-wrangle" class="workspace" hidden>
+      <aside class="rail">
+        <section class="panel">
+          <h2>Project / scope</h2>
+          <p class="hint">Pick the job, then the test discipline you want to shape.</p>
+          <div class="project-list"></div>
+          <label class="te-label">Discipline</label>
+          <select id="wr-discipline" class="wide-select"></select>
+        </section>
+
+        <section class="panel">
+          <h2>Query</h2>
+          <p class="hint">This SELECT feeds the wrangler. Edit it freely.</p>
+          <textarea id="wr-sql" class="wr-sql" rows="7" spellcheck="false"></textarea>
+          <div class="wr-run-row">
+            <button type="button" id="wr-run" class="generate secondary compact">Run query</button>
+            <span id="wr-run-meta" class="hint"></span>
+          </div>
+        </section>
+
+        <section class="panel" id="wr-columns-panel" hidden>
+          <h2>Shape the columns</h2>
+          <p class="hint">Reorder, rename, hide, merge repeats — like the notebook widgets.</p>
+          <div class="wr-sort">
+            <label>Sort by
+              <select id="wr-sort-by"></select>
+            </label>
+            <button type="button" id="wr-sort-dir" class="chip-btn" data-dir="asc">▲ asc</button>
+          </div>
+          <label class="wr-hl">Merge highlight
+            <input type="color" id="wr-highlight" value="#D4EDDA" />
+          </label>
+          <div id="wr-columns" class="wr-columns"></div>
+        </section>
+
+        <section class="panel" id="wr-save-panel" hidden>
+          <h2>Save to Gold</h2>
+          <p class="hint">Writes to <code>emc_gold.report_tables</code> → available in the Report tab.</p>
+          <label class="te-label">Table label</label>
+          <input id="wr-label" class="wide-select" placeholder="Worst-case radiated emissions" />
+          <button type="button" id="wr-save" class="generate">Save wrangled table</button>
+          <button type="button" id="wr-save-report" class="chip-btn good" hidden>Open in Report →</button>
+          <p id="wr-status" class="status"></p>
+        </section>
+      </aside>
+
+      <div class="workspace-pane stack">
+        <section class="panel">
+          <h2>Wrangled preview</h2>
+          <p class="hint" id="wr-preview-meta">Run a query to see the shaped table that will land in the PDF.</p>
+          <div id="wr-preview" class="wr-preview">
+            <p class="hint">No data yet — run a query on the left.</p>
+          </div>
+          <details class="wr-raw">
+            <summary>Raw query result</summary>
+            <div id="wr-raw-grid" class="data-grid"></div>
+          </details>
+        </section>
+      </div>
+    </section>
+
+    <!-- ────────────── TAB 3 — the document ────────────── -->
+    <section id="ws-report" class="workspace">
+      <aside class="rail">
+        <section class="panel">
+          <h2>Report template</h2>
+          <p class="hint" id="template-desc">Pick a house style, or upload your own template file.</p>
+          <select id="template-pick" class="wide-select"></select>
+          <div class="tpl-io">
+            <label class="file-btn">Upload JSON<input type="file" id="template-file" accept="application/json,.json" hidden /></label>
+            <button type="button" id="template-download" class="chip-btn">Download JSON</button>
+            <button type="button" id="template-reset" class="chip-btn">Reset</button>
+          </div>
+
+          <details class="tpl-group" open>
+            <summary>Table formatting</summary>
+            <div class="tpl-grid">
+              <label class="tick"><input type="checkbox" data-tpl="table_style.banded_rows" /><span>Banded rows</span></label>
+              <label class="tick"><input type="checkbox" data-tpl="table_style.header_bold" /><span>Bold header</span></label>
+              <label class="tick"><input type="checkbox" data-tpl="table_style.status_color_coding" /><span>Colour PASS / FAIL</span></label>
+              <label class="tick"><input type="checkbox" data-tpl="table_style.repeat_header_each_page" /><span>Repeat header</span></label>
+            </div>
+            <label class="tpl-field">Border width <span class="val" id="v-border">0.5 pt</span>
+              <input type="range" min="0" max="2" step="0.25" data-tpl="table_style.border_width_pt" data-out="v-border" data-unit=" pt" />
+            </label>
+            <label class="tpl-field">Cell padding <span class="val" id="v-pad">4 pt</span>
+              <input type="range" min="0" max="10" step="0.5" data-tpl="table_style.cell_padding_pt" data-out="v-pad" data-unit=" pt" />
+            </label>
+            <div class="tpl-grid">
+              <label class="tpl-field">Header fill <input type="color" data-tpl="brand.table_header_fill" /></label>
+              <label class="tpl-field">Header text <input type="color" data-tpl="brand.table_header_text" /></label>
+              <label class="tpl-field">Band fill <input type="color" data-tpl="brand.table_band_fill" /></label>
+              <label class="tpl-field">Borders <input type="color" data-tpl="brand.table_border" /></label>
+              <label class="tpl-field">PASS <input type="color" data-tpl="brand.pass" /></label>
+              <label class="tpl-field">FAIL <input type="color" data-tpl="brand.fail" /></label>
+              <label class="tpl-field">Header type <input type="number" min="6" max="14" step="0.5" data-tpl="fonts.table_header_size" /></label>
+              <label class="tpl-field">Cell type <input type="number" min="6" max="14" step="0.5" data-tpl="fonts.table_cell_size" /></label>
+            </div>
+          </details>
+
+          <details class="tpl-group">
+            <summary>Page &amp; type</summary>
+            <div class="tpl-grid">
+              <label class="tpl-field">Margin top <input type="number" min="8" max="40" data-tpl="page.margin_top_mm" /></label>
+              <label class="tpl-field">Margin bottom <input type="number" min="8" max="40" data-tpl="page.margin_bottom_mm" /></label>
+              <label class="tpl-field">Margin left <input type="number" min="8" max="40" data-tpl="page.margin_left_mm" /></label>
+              <label class="tpl-field">Margin right <input type="number" min="8" max="40" data-tpl="page.margin_right_mm" /></label>
+              <label class="tpl-field">Body type <input type="number" min="7" max="14" step="0.5" data-tpl="fonts.body_size" /></label>
+              <label class="tpl-field">Heading type <input type="number" min="10" max="28" step="0.5" data-tpl="fonts.h1_size" /></label>
+              <label class="tpl-field">Heading colour <input type="color" data-tpl="brand.primary_dark" /></label>
+              <label class="tpl-field">Rule colour <input type="color" data-tpl="brand.primary" /></label>
+            </div>
+          </details>
+
+          <details class="tpl-group">
+            <summary>Cover, plots &amp; marks</summary>
+            <div class="tpl-grid">
+              <label class="tick"><input type="checkbox" data-tpl="cover.show_hero_image" /><span>Hero image</span></label>
+              <label class="tick"><input type="checkbox" data-tpl="cover.show_logo" /><span>Element logo</span></label>
+              <label class="tick"><input type="checkbox" data-tpl="cover.show_partner_strip" /><span>Partner logo</span></label>
+              <label class="tick"><input type="checkbox" data-tpl="cover.classification_banner" /><span>Classification bar</span></label>
+              <label class="tick"><input type="checkbox" data-tpl="options.include_plots" /><span>Spectrum plots</span></label>
+              <label class="tick"><input type="checkbox" data-tpl="options.watermark_draft" /><span>DRAFT watermark</span></label>
+            </div>
+            <label class="tpl-field wide">Watermark text <input type="text" data-tpl="options.watermark_text" /></label>
+            <label class="tpl-field wide">Footer centre <input type="text" data-tpl="footer.center_text" /></label>
+          </details>
+        </section>
+
+        <section class="panel">
+          <h2>Project / scope</h2>
+          <p class="hint">Select a job, then edit the fields that feed the report.</p>
+          <div class="project-list"></div>
+        </section>
+
+        <section class="panel">
+          <h2>Modify the document</h2>
+          <p class="hint">Changes apply to the preview — they do not write back to Gold.</p>
+          <form id="editor" class="editor" autocomplete="off">
+            <label>Project name <input name="project_name" /></label>
+            <div class="row-2">
+              <label>Document no. <input name="document_number" /></label>
+              <label>Revision <input name="revision" /></label>
+            </div>
+            <div class="row-2">
+              <label>Issue date <input name="issue_date" /></label>
+              <label>Classification <input name="classification" /></label>
+            </div>
+            <label>Client <input name="client" /></label>
+            <label>EUT model <input name="eut_model" /></label>
+            <label>Serial <input name="eut_serial" /></label>
+            <label>EUT description <textarea name="eut_description" rows="3"></textarea></label>
+          </form>
+        </section>
+
+        <section class="panel">
+          <h2>Sections</h2>
+          <p class="hint">Parts of the report to produce — from <strong id="template-name">Default</strong>.</p>
+          <div class="section-actions">
+            <button type="button" id="all-on" class="linkish">Select all</button>
+            <button type="button" id="all-off" class="linkish">Select none</button>
+          </div>
+          <div id="sections" class="section-grid"></div>
+          <div class="formats">
+            <button type="button" id="fmt-docx" class="format-btn active">Word (.docx)</button>
+            <button type="button" id="fmt-pdf" class="format-btn active">PDF</button>
+          </div>
+          <button type="button" id="generate" class="generate">Issue the pack</button>
+          <p id="status" class="status"></p>
+        </section>
+      </aside>
+
+      <div class="workspace-pane">
+        <div class="preview-panel">
+          <div class="preview-toolbar">
+            <div>
+              <h2 id="doc-title">Document</h2>
+              <p class="hint" id="preview-meta">Hover any table in the report to change it.</p>
+            </div>
+            <div class="preview-actions">
+              <div class="view-toggle">
+                <button type="button" id="view-doc" class="view-btn active">Live document</button>
+                <button type="button" id="view-pdf" class="view-btn">PDF</button>
+              </div>
+              <span id="stale" class="stale" hidden>PDF out of date</span>
+              <div id="downloads" class="downloads"></div>
+            </div>
+          </div>
+
+          <div class="preview-stage">
+            <div id="doc-view" class="doc-view">
+              <div id="doc-body" class="doc-paper">
+                <p class="doc-loading">Building the document…</p>
+              </div>
+            </div>
+            <div id="pdf-view" class="pdf-view" hidden>
+              <div id="preview-empty" class="preview-empty">
+                <strong>No PDF yet</strong>
+                <span>Press Issue the pack to render the signed document.</span>
+              </div>
+              <iframe id="preview-frame" title="EMC report preview" hidden></iframe>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- floating table editor -->
+  <div id="table-editor" class="table-editor" hidden>
+    <div class="te-head">
+      <strong id="te-title">Radiated emissions table</strong>
+      <button type="button" id="te-close" class="te-close" aria-label="Close">×</button>
+    </div>
+    <label class="te-label">Say what this table should show</label>
+    <textarea id="te-prompt" rows="2" placeholder="only the worst 5 rows · add the detector column · average margin per frequency band"></textarea>
+    <div class="chips" id="te-chips">
+      <button type="button" class="chip-btn" data-te="worst 5 rows by margin">Worst 5</button>
+      <button type="button" class="chip-btn" data-te="only rows where status = 'FAIL'">Fails only</button>
+      <button type="button" class="chip-btn" data-te="add the detector and polarisation columns">More columns</button>
+      <button type="button" class="chip-btn" data-te="average margin_db grouped by 200 MHz frequency band">Aggregate</button>
+    </div>
+    <label class="te-label">Saved report tables (from the notebook)</label>
+    <div class="te-saved-row">
+      <select id="te-saved"><option value="">— none saved for this section —</option></select>
+      <button type="button" id="te-use-saved" class="chip-btn good">Use saved</button>
+    </div>
+    <label class="te-label">Take the data from</label>
+    <select id="te-table"></select>
+    <label class="te-label">SQL behind this table</label>
+    <textarea id="te-sql" rows="6" spellcheck="false"></textarea>
+    <div class="te-actions">
+      <button type="button" id="te-run" class="generate secondary">Run SQL as-is</button>
+      <button type="button" id="te-apply" class="generate">Apply to the report</button>
+    </div>
+    <p id="te-status" class="status"></p>
+  </div>
+
+  <p class="footer">UKAS 17025 · Element Materials Technology · Unity Catalog Gold + Lakeflow <code>emc_pipeline</code></p>
+  <script src="/static/app.js?v=__V__"></script>
+</body>
+</html>

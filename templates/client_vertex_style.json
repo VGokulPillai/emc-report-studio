@@ -1,0 +1,94 @@
+{
+  "template_name": "Client house style — Vertex Aerospace",
+  "template_version": "1.0",
+  "description": "Example of a customer-supplied template: their green/graphite palette, light table headers with strong borders, no partner branding, generous margins.",
+
+  "page": {
+    "size": "A4",
+    "margin_top_mm": 25,
+    "margin_bottom_mm": 22,
+    "margin_left_mm": 24,
+    "margin_right_mm": 24
+  },
+
+  "brand": {
+    "primary": "#00694E",
+    "primary_dark": "#0C2B24",
+    "accent": "#8CC63F",
+    "pass": "#00694E",
+    "fail": "#C0392B",
+    "text": "#20262B",
+    "muted": "#6A7378",
+    "table_header_fill": "#E4EFE9",
+    "table_header_text": "#0C2B24",
+    "table_band_fill": "#F6FAF8",
+    "table_border": "#00694E",
+    "rule": "#8CC63F"
+  },
+
+  "fonts": {
+    "body_family": "Helvetica",
+    "heading_family": "Helvetica-Bold",
+    "body_size": 10,
+    "h1_size": 17,
+    "h2_size": 13,
+    "h3_size": 11,
+    "table_header_size": 9,
+    "table_cell_size": 9,
+    "caption_size": 8
+  },
+
+  "table_style": {
+    "banded_rows": true,
+    "header_bold": true,
+    "border_width_pt": 0.9,
+    "cell_padding_pt": 5,
+    "status_color_coding": true,
+    "repeat_header_each_page": true
+  },
+
+  "cover": {
+    "show_hero_image": true,
+    "hero_image": "element-lab-hero.png",
+    "show_logo": true,
+    "logo": "element-logo.png",
+    "partner_logo": "databricks-logo.png",
+    "show_partner_strip": false,
+    "classification_banner": true
+  },
+
+  "header": {
+    "enabled": true,
+    "left_text": "{document_number}",
+    "right_text": "{project_name}",
+    "show_logo": true
+  },
+  "footer": {
+    "enabled": true,
+    "left_text": "{classification}",
+    "center_text": "Prepared for Vertex Aerospace Systems Ltd",
+    "right_text": "Page {page} of {pages}"
+  },
+
+  "sections": {
+    "cover": true,
+    "revision_history": true,
+    "table_of_contents": true,
+    "executive_summary": true,
+    "eut_description": true,
+    "test_summary": true,
+    "radiated_emissions": true,
+    "conducted_emissions": true,
+    "radiated_immunity": true,
+    "esd_immunity": true,
+    "appendix_raw_data": true,
+    "declaration": true
+  },
+
+  "options": {
+    "include_plots": true,
+    "plot_dpi": 150,
+    "watermark_draft": false,
+    "watermark_text": "DRAFT"
+  }
+}
